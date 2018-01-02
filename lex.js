@@ -10,10 +10,10 @@ function lex (src, dst=[]) {
   }
 
   // push/pop
-  if (hint === '(') {
+  if (hint === '(' || hint === '[') {
     const [ remainder, subterm ] = lex(src.substr(1), [])
     return lex(remainder, dst.concat([ subterm ]))
-  } else if (hint === ')') {
+  } else if (hint === ')' || hint === ']') {
     return [ src.substr(1), dst ]
   }
 
@@ -49,7 +49,7 @@ function lex_number (src) {
 }
 
 function token (src) {
-  const space_re_result = /\s|\)/.exec(src)
+  const space_re_result = /\s|\)|\]/.exec(src)
   const end_index = space_re_result != null ? space_re_result.index : src.length
   return [ src.slice(0, end_index), src.substr(end_index) ]
 }
@@ -70,8 +70,8 @@ export function test (suite) {
     t => t.eq(token('apple banana'))([ 'apple', ' banana' ]),
     t => t.eq(token('(hello 5 )'))([ '(hello', ' 5 )' ]),
     t => t.eq(lex(' )'))([ '', [] ]),
-    t => t.eq(lex('(sexp 5 "hello" (atom a "b" 3 (deeper 14 again)) continues)'))
-             ([[ 'sexp', 5, '"hello"', [ 'atom', 'a', '"b"', 3, [ 'deeper', 14, 'again' ] ], 'continues' ]]),
+    t => t.eq(lex('(sexp [5 "hello"] (atom a "b" 3 (deeper 14 again)) continues)'))
+             ([[ 'sexp', [ 5, '"hello"' ], [ 'atom', 'a', '"b"', 3, [ 'deeper', 14, 'again' ] ], 'continues' ]]),
     t => t.eq(lex('55'))([ 55 ]),
     t => t.eq(lex('123 "abc" hi'))([ 123, '"abc"', 'hi' ]),
   ])
