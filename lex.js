@@ -60,3 +60,19 @@ function eat_spaces (src) {
 }
 
 export default lex
+
+export function test (suite) {
+  suite(`test`, [
+    t => t.eq(eat_spaces('    a'))('a'),
+    t => t.eq(lex_atom('apple'))([ 'apple', '' ]),
+    t => t.eq(lex_string('"hi there"'))([ '"hi there"', '' ]),
+    t => t.eq(lex_number('512.16'))([ 512.16, '' ]),
+    t => t.eq(token('apple banana'))([ 'apple', ' banana' ]),
+    t => t.eq(token('(hello 5 )'))([ '(hello', ' 5 )' ]),
+    t => t.eq(lex(' )'))([ '', [] ]),
+    t => t.eq(lex('(sexp 5 "hello" (atom a "b" 3 (deeper 14 again)) continues)'))
+             ([[ 'sexp', 5, '"hello"', [ 'atom', 'a', '"b"', 3, [ 'deeper', 14, 'again' ] ], 'continues' ]]),
+    t => t.eq(lex('55'))([ 55 ]),
+    t => t.eq(lex('123 "abc" hi'))([ 123, '"abc"', 'hi' ]),
+  ])
+}
