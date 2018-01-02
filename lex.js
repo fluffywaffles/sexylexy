@@ -1,0 +1,62 @@
+// NOTE: if we want to detect imbalanced parens we need to analyze ahead-of-time
+function lex (src, dst=[]) {
+  if (src === '') return dst
+
+  const hint = src[0]
+
+  // ignore spaces
+  if (hint === ' ') {
+    return lex(eat_spaces(src), dst)
+  }
+
+  // push/pop
+  if (hint === '(') {
+    const [ remainder, subterm ] = lex(src.substr(1), [])
+    return lex(remainder, dst.concat([ subterm ]))
+  } else if (hint === ')') {
+    return [ src.substr(1), dst ]
+  }
+
+  // data
+  if (hint === '"') {
+    const [ string, remainder ] = lex_string(src)
+    return lex(remainder, dst.concat([ string ]))
+  } else if (/\d/.test(hint)) {
+    const [ number, remainder ] = lex_number(src)
+    return lex(remainder, dst.concat([ number ]))
+  } else {
+    const [ atom, remainder ] = lex_atom(src)
+    return lex(remainder, dst.concat([ atom ]))
+  }
+}
+
+function lex_atom (src) {
+  return token(src)
+}
+
+function lex_string (src) {
+  const no_lquote = src.substr(1)
+  const rquote_re_result = /"/.exec(no_lquote)
+  if (rquote_re_result === null) throw new Error(`non-terminated string`)
+  const body_length = rquote_re_result.index
+  const string_length = body_length + 2 // add back the quotes
+  return [ src.slice(0, string_length), src.substr(string_length) ]
+}
+
+function lex_number (src) {
+  const [ number_string, remainder ] = token(src)
+  return [ parseFloat(number_string), remainder ]
+}
+
+function token (src) {
+  const space_re_result = /\s|\)/.exec(src)
+  const end_index = space_re_result != null ? space_re_result.index : src.length
+  return [ src.slice(0, end_index), src.substr(end_index) ]
+}
+
+function eat_spaces (src) {
+  const nonspace_index = /\S/.exec(src).index
+  return src.substr(nonspace_index)
+}
+
+export default lex
