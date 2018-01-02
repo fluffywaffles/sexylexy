@@ -6,9 +6,18 @@
   "scripts": {
     "test": "pnpx rollup -f cjs ./test.js | node"
   },
-  "author": "",
+  "author": "fluffywaffles",
   "license": "ISC",
   "devDependencies": {
     "rollup": "^0.53.2"
-  }
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fluffywaffles/sexylexy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fluffywaffles/sexylexy/issues"
+  },
+  "homepage": "https://github.com/fluffywaffles/sexylexy#readme"
 }
