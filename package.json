@@ -1,0 +1,14 @@
+{
+  "name": "sexylexy",
+  "version": "1.0.0",
+  "description": "S-Expression lexer that parses floats",
+  "main": "lex.js",
+  "scripts": {
+    "test": "pnpx rollup -f cjs ./test.js | node"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^0.53.2"
+  }
+}

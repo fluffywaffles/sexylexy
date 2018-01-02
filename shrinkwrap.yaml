@@ -1,0 +1,12 @@
+devDependencies:
+  rollup: 0.53.2
+packages:
+  /rollup/0.53.2:
+    dev: true
+    resolution:
+      integrity: sha512-7KbFOFV9FSxPYmcTi+0LuciI0uixNAz7F1B7u05QxXxVVV8FcFazpd19C/ybLz5//NP4N2L8rmnK0mT9ki+NvA==
+registry: 'https://registry.npmjs.org/'
+shrinkwrapMinorVersion: 4
+shrinkwrapVersion: 3
+specifiers:
+  rollup: ^0.53.2
