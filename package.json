@@ -1,6 +1,6 @@
 {
   "name": "sexylexy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "S-Expression lexer that parses floats",
   "main": "lex.js",
   "scripts": {
