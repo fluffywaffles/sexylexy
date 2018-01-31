@@ -1,7 +1,7 @@
 {
   "name": "sexylexy",
   "version": "2.0.0",
-  "description": "S-Expression lexer that parses floats",
+  "description": "S-Expression lexer",
   "main": "lex.js",
   "scripts": {
     "test": "pnpx rollup -f cjs ./test.js | node"
