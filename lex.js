@@ -19,15 +19,15 @@ function lex (src, dst=[]) {
 
   // data
   if (hint === '"') {
-    const [ string, remainder ] = string(src)
+    const [ string, remainder ] = lex_string(src)
     return lex(remainder, dst.concat([ string ]))
   } else {
-    const [ atom, remainder ] = atom(src)
-    return lex(remainder, dst.concat([ atom ]))
+    const [ atm, remainder ] = lex_atom(src)
+    return lex(remainder, dst.concat([ atm ]))
   }
 }
 
-function string (src) {
+function lex_string (src) {
   const no_lquote = src.substr(1)
   const rquote_re_result = /"/.exec(no_lquote)
   if (rquote_re_result === null) throw new Error(`non-terminated string`)
@@ -36,7 +36,7 @@ function string (src) {
   return [ src.slice(0, string_length), src.substr(string_length) ]
 }
 
-function atom (src) {
+function lex_atom (src) {
   const space_re_result = /\s|\)|\]/.exec(src)
   const end_index = space_re_result != null ? space_re_result.index : src.length
   return [ src.slice(0, end_index), src.substr(end_index) ]
@@ -47,16 +47,16 @@ function eat_spaces (src) {
   return src.substr(nonspace_index)
 }
 
-export default lex
+export default linewise
 
 export function test (suite) {
   suite(`test`, [
     t => t.eq(eat_spaces('    a'))('a'),
-    t => t.eq(atom('apple'))([ 'apple', '' ]),
-    t => t.eq(string('"hi there"'))([ '"hi there"', '' ]),
-    t => t.eq(atom('512.16'))([ '512.16', '' ]),
-    t => t.eq(atom('apple banana strawberry'))([ 'apple', ' banana strawberry' ]),
-    t => t.eq(atom('(hello 5 )'))([ '(hello', ' 5 )' ]),
+    t => t.eq(lex_atom('apple'))([ 'apple', '' ]),
+    t => t.eq(lex_string('"hi there"'))([ '"hi there"', '' ]),
+    t => t.eq(lex_atom('512.16'))([ '512.16', '' ]),
+    t => t.eq(lex_atom('apple banana strawberry'))([ 'apple', ' banana strawberry' ]),
+    t => t.eq(lex_atom('(hello 5 )'))([ '(hello', ' 5 )' ]),
     t => t.eq(lex(' )'))([ '', [] ]),
     t => t.eq(lex('(sexp [5 "hello"] (atom a "b" 3 (deeper 14 again)) continues)'))
              ([[ 'sexp', [ '5', '"hello"' ], [ 'atom', 'a', '"b"', '3', [ 'deeper', '14', 'again' ] ], 'continues' ]]),
