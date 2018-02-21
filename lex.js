@@ -1,3 +1,13 @@
+function linewise (src) {
+  const single_line = src
+    .split('\n')               // split up lines
+    .map(eat_spaces)           // remove leading spaces
+    .filter(l => l[0] !== ';') // delete comments
+    .join('')                  // join lines without returns
+
+  return lex(single_line)
+}
+
 // TODO: detect imbalanced parens by analysis ahead of time
 function lex (src, dst=[]) {
   if (src === '') return dst
@@ -64,11 +74,11 @@ export function test (suite) {
     t => t.eq(lex('123 "abc" hi'))([ '123', '"abc"', 'hi' ]),
     t => t.eq(lex('"(this expression is quoted)()(([)"'))
             (['"(this expression is quoted)()(([)"']),
-    t => t.eq(lex(`(form [] (text [] "hello, kitten")
+    t => t.eq(linewise(`(form [] (text [] "hello, kitten")
                                 (list [] [(text [] "hello, kitten") (number [] 14)])
                                 (number [] 14)
                                 (media [application/octet-stream] "0x47ba1399")
-                                (group [] (text [] "hello, kitten")))`.replace(/\n/g, '')))
+                                (group [] (text [] "hello, kitten")))`))
             ([[ 'form', [], [ 'text', [], '"hello, kitten"' ],
                            [ 'list', [], [[ 'text', [], '"hello, kitten"' ],
                                           [ 'number', [], '14' ]] ],
