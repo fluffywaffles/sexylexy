@@ -1,9 +1,10 @@
 function linewise (src) {
   const single_line = src
-    .split('\n')               // split up lines
-    .map(eat_spaces)           // remove leading spaces
-    .filter(l => l[0] !== ';') // delete comments
-    .join('')                  // join lines without returns
+    .split('\n')                        // split up lines
+    .filter(l => /\S/.exec(l) !== null) // delete blank lines
+    .map(eat_spaces)                    // remove leading spaces
+    .filter(l => l[0] !== ';')          // delete commented ones
+    .join(' ')                          // join lines without returns
 
   return lex(single_line)
 }
