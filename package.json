@@ -1,6 +1,6 @@
 {
   "name": "sexylexy",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "S-Expression lexer",
   "main": "lex.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "fluffywaffles",
   "license": "ISC",
   "devDependencies": {
+    "@sisyphus/sisyphus": "0.0.3",
     "rollup": "^0.53.2"
   },
   "dependencies": {},
