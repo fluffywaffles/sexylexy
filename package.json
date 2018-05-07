@@ -1,6 +1,6 @@
 {
   "name": "sexylexy",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "S-Expression lexer",
   "main": "lex.js",
   "scripts": {
