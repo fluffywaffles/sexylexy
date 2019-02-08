@@ -4,7 +4,7 @@
   "description": "S-Expression lexer",
   "main": "lex.js",
   "scripts": {
-    "test": "pnpx rollup -f cjs ./test.js | node"
+    "test": "npx rollup -f cjs ./test.js | node"
   },
   "author": "fluffywaffles",
   "license": "ISC",
