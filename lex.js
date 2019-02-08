@@ -10,20 +10,20 @@ function linewise (src) {
 }
 
 // TODO: detect imbalanced parens by analysis ahead of time
-function lex (src, dst=[]) {
+function lex (src, dst=[], depth=0) {
   if (src === '') return dst
 
   const hint = src[0]
 
   // ignore spaces
   if (hint === ' ') {
-    return lex(eat_spaces(src), dst)
+    return lex(eat_spaces(src), dst, depth + 1)
   }
 
   // push/pop
   if (hint === '(' || hint === '[') {
-    const [ remainder, subterm ] = lex(src.substr(1), [])
-    return lex(remainder, dst.concat([ subterm ]))
+    const [ remainder, subterm ] = lex(src.substr(1), [], depth + 1)
+    return lex(remainder, dst.concat([ subterm ]), depth + 1)
   } else if (hint === ')' || hint === ']') {
     return [ src.substr(1), dst ]
   }
@@ -31,10 +31,10 @@ function lex (src, dst=[]) {
   // data
   if (hint === '"') {
     const [ string, remainder ] = lex_string(src)
-    return lex(remainder, dst.concat([ string ]))
+    return lex(remainder, dst.concat([ string ]), depth + 1)
   } else {
     const [ atm, remainder ] = lex_atom(src)
-    return lex(remainder, dst.concat([ atm ]))
+    return lex(remainder, dst.concat([ atm ]), depth + 1)
   }
 }
 
